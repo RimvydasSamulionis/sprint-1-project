@@ -14,8 +14,9 @@
 - Keep the application simple.
 - Prefer modifying existing files over creating new files.
 - Don’t add any external libraries or packages without asking first.
-- Don’t add any new pages unless explicitly requested.
-- Keep everything on one screen unless instructed otherwise.
+- The app has two routes: `/` (home page) and `/workspace` (document management workspace).
+- Do not add further routes unless explicitly requested.
+- Do not add any new pages beyond these two unless explicitly requested.
 - Use TypeScript strict typing.
 - Follow existing project structure and naming conventions.
 
