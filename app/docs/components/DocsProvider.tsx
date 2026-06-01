@@ -17,6 +17,18 @@ type DocsContextValue = {
   deleteDoc: (id: string) => void;
 };
 
+// crypto.randomUUID() requires a secure context (HTTPS/localhost).
+// Accessing via a LAN IP over HTTP falls back to this UUID v4 generator.
+function generateId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = Math.random() * 16 | 0;
+    return (c === "x" ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+}
+
 const DocsContext = createContext<DocsContextValue | null>(null);
 
 const STORAGE_KEY = "docs";
@@ -46,7 +58,7 @@ export function DocsProvider({ children }: { children: ReactNode }) {
 
   function createDoc(): Doc {
     const newDoc: Doc = {
-      id: crypto.randomUUID(),
+      id: generateId(),
       title: "Untitled",
       body: "",
       updatedAt: new Date(),

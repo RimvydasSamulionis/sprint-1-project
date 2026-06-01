@@ -16,6 +16,7 @@ export default function Sidebar() {
 
   function handleNewDocument() {
     const newDoc = createDoc();
+    sessionStorage.setItem("focusTitle", newDoc.id);
     router.push(`/docs/${newDoc.id}`);
   }
 
@@ -25,8 +26,10 @@ export default function Sidebar() {
     if (pathname === `/docs/${id}`) router.push("/docs");
   }
 
+  const isDocOpen = pathname.startsWith("/docs/");
+
   return (
-    <aside className="w-64 shrink-0 border-r border-zinc-200 bg-zinc-50 flex flex-col">
+    <aside className={`${isDocOpen ? "hidden md:flex" : "flex"} w-full md:w-64 shrink-0 border-b md:border-b-0 md:border-r border-zinc-200 bg-zinc-50 flex-col`}>
       <div className="p-3 border-b border-zinc-200 space-y-2">
         <button
           onClick={handleNewDocument}
@@ -44,9 +47,14 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex-1 overflow-y-auto p-2">
-        {filtered.length === 0 ? (
+        {docs.length === 0 ? (
+          <div className="px-2 py-6 text-center space-y-2">
+            <p className="text-xs text-zinc-500">No documents yet.</p>
+            <p className="text-xs text-zinc-400">Click &ldquo;+ New Document&rdquo; to get started.</p>
+          </div>
+        ) : filtered.length === 0 ? (
           <p className="px-2 py-4 text-center text-xs text-zinc-400">
-            No documents found
+            No results for &ldquo;{query}&rdquo;
           </p>
         ) : (
           <ul className="space-y-0.5">

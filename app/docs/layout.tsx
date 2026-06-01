@@ -4,7 +4,7 @@ import Sidebar from "./components/Sidebar";
 export default function DocsLayout({ children }: { children: React.ReactNode }) {
   return (
     <DocsProvider>
-      <div className="flex flex-1 h-full">
+      <div className="flex flex-1 flex-col md:flex-row h-full">
         <Sidebar />
         {children}
       </div>
