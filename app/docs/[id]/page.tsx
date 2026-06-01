@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useDocs } from "../components/DocsProvider";
 
@@ -13,8 +14,14 @@ export default function DocPage() {
 
   if (!doc) {
     return (
-      <main className="flex flex-1 items-center justify-center text-zinc-400">
+      <main className="flex flex-1 flex-col items-center justify-center gap-4 text-zinc-400">
         <p className="text-sm">Document not found</p>
+        <Link
+          href="/docs"
+          className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700"
+        >
+          Back to workspace
+        </Link>
       </main>
     );
   }

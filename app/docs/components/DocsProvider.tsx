@@ -14,6 +14,7 @@ type DocsContextValue = {
   initialized: boolean;
   createDoc: () => Doc;
   updateDoc: (id: string, changes: Partial<Pick<Doc, "title" | "body">>) => void;
+  deleteDoc: (id: string) => void;
 };
 
 const DocsContext = createContext<DocsContextValue | null>(null);
@@ -64,8 +65,14 @@ export function DocsProvider({ children }: { children: ReactNode }) {
     saveDocs(updated);
   }
 
+  function deleteDoc(id: string) {
+    const updated = docs.filter((doc) => doc.id !== id);
+    setDocs(updated);
+    saveDocs(updated);
+  }
+
   return (
-    <DocsContext.Provider value={{ docs, initialized, createDoc, updateDoc }}>
+    <DocsContext.Provider value={{ docs, initialized, createDoc, updateDoc, deleteDoc }}>
       {children}
     </DocsContext.Provider>
   );

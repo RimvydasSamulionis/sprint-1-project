@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useDocs } from "./DocsProvider";
 
 export default function Sidebar() {
   const router = useRouter();
-  const { docs, createDoc } = useDocs();
+  const pathname = usePathname();
+  const { docs, createDoc, deleteDoc } = useDocs();
   const [query, setQuery] = useState("");
 
   const filtered = docs
@@ -16,6 +17,12 @@ export default function Sidebar() {
   function handleNewDocument() {
     const newDoc = createDoc();
     router.push(`/docs/${newDoc.id}`);
+  }
+
+  function handleDelete(id: string) {
+    if (!window.confirm("Delete this document? This cannot be undone.")) return;
+    deleteDoc(id);
+    if (pathname === `/docs/${id}`) router.push("/docs");
   }
 
   return (
@@ -44,12 +51,19 @@ export default function Sidebar() {
         ) : (
           <ul className="space-y-0.5">
             {filtered.map((doc) => (
-              <li key={doc.id}>
+              <li key={doc.id} className="group flex items-center rounded-md hover:bg-zinc-100">
                 <button
                   onClick={() => router.push(`/docs/${doc.id}`)}
-                  className="w-full rounded-md px-3 py-2 text-left text-sm text-zinc-700 hover:bg-zinc-100"
+                  className="flex-1 px-3 py-2 text-left text-sm text-zinc-700 truncate"
                 >
                   {doc.title}
+                </button>
+                <button
+                  onClick={() => handleDelete(doc.id)}
+                  aria-label={`Delete ${doc.title}`}
+                  className="mr-1 rounded p-1 text-zinc-400 opacity-0 transition-opacity hover:text-red-500 group-hover:opacity-100"
+                >
+                  ×
                 </button>
               </li>
             ))}
