@@ -15,6 +15,7 @@ type DocsContextValue = {
   createDoc: () => Doc;
   updateDoc: (id: string, changes: Partial<Pick<Doc, "title" | "body">>) => void;
   deleteDoc: (id: string) => void;
+  importDocs: (incoming: Doc[]) => void;
 };
 
 // crypto.randomUUID() requires a secure context (HTTPS/localhost).
@@ -83,8 +84,13 @@ export function DocsProvider({ children }: { children: ReactNode }) {
     saveDocs(updated);
   }
 
+  function importDocs(incoming: Doc[]) {
+    setDocs(incoming);
+    saveDocs(incoming);
+  }
+
   return (
-    <DocsContext.Provider value={{ docs, initialized, createDoc, updateDoc, deleteDoc }}>
+    <DocsContext.Provider value={{ docs, initialized, createDoc, updateDoc, deleteDoc, importDocs }}>
       {children}
     </DocsContext.Provider>
   );
