@@ -80,6 +80,7 @@ export default function Sidebar() {
         const imported: Doc[] = (data.docs as any[]).map((d) => ({
           ...d,
           updatedAt: new Date(d.updatedAt),
+          history: (d.history ?? []).map((h: any) => ({ ...h, savedAt: new Date(h.savedAt) })),
         }));
         importDocs(imported);
         setImportError("");
