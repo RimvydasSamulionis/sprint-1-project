@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sprint 1 Project — Document Workspace
 
-## Getting Started
+## Overview
 
-First, run the development server:
+This is a single-user, browser-based document management application built with Next.js. It allows a user to create, edit, organise, and preview Markdown documents entirely client-side, with no backend server or database required. The application is intended as a lightweight "workspace" for writing and managing personal notes or documents.
+
+## Features Implemented
+
+- **Create documents** — add new documents to the workspace from the sidebar
+- **Edit documents** — update document title and content with live editing
+- **Delete documents** — remove documents from the workspace
+- **Markdown preview** — toggle between raw Markdown editing and a rendered preview
+- **Persistent storage** — documents persist across browser sessions via `localStorage`
+- **Responsive layout** — usable workspace experience on both desktop and mobile screens
+
+## Optional Tasks Completed
+
+- **Export / Import Workspace** — the entire workspace (all documents) can be exported to a file and re-imported later, allowing backup and transfer between browsers/devices
+- **Document History** — each document keeps up to 3 previous versions, with the ability to restore any of them
+
+## Technology Stack
+
+- [Next.js](https://nextjs.org) (App Router)
+- [TypeScript](https://www.typescriptlang.org)
+- [React](https://react.dev)
+- [Tailwind CSS](https://tailwindcss.com)
+- `localStorage` (browser-based persistence)
+
+## Installation
+
+```bash
+git clone <repository-url>
+cd sprint-1-project
+npm install
+```
+
+## Running Locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000) in your browser. The app auto-reloads as files are edited.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+app/
+├── page.tsx                  # Landing / home page
+├── layout.tsx                # Root layout
+├── globals.css                # Global styles (Tailwind)
+└── docs/
+    ├── page.tsx               # Workspace overview page
+    ├── layout.tsx              # Workspace layout (sidebar + content)
+    ├── [id]/
+    │   └── page.tsx            # Individual document route (edit/preview)
+    └── components/
+        ├── DocsProvider.tsx     # Document state, persistence, history, export/import logic
+        └── Sidebar.tsx           # Document navigation sidebar
+docs/
+└── nextjs-layouts-and-pages.md  # Reference notes on Next.js routing, used during development
+public/                            # Static assets
+```
 
-## Learn More
+## Screenshots
 
-To learn more about Next.js, take a look at the following resources:
+> Screenshots have not yet been added. Once available, place image files in `docs/screenshots/` and reference them below.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+![Workspace screenshot placeholder](docs/screenshots/workspace.png)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Persistence Decision Summary
 
-## Deploy on Vercel
+The application uses `localStorage` for persistence. This decision was made because the app is single-user and has no backend: there is no need for server-side storage, multi-device sync, or the larger capacity offered by `IndexedDB`. `sessionStorage` was ruled out because it would not persist data across browser sessions, and cookies are unsuitable due to size limits and their server-communication purpose. `localStorage` gives persistent, dependency-free storage that is well matched to the relatively small amount of data this application manages. See [REFLECTION.md](REFLECTION.md) for the full reasoning.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Git Workflow Summary
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Development followed a **feature → review → implementation → PR** workflow:
+
+1. Each feature (e.g. Markdown preview, Export/Import, Document History) was scoped and planned before coding began.
+2. Proposed approaches were reviewed for simplicity and fit with project goals before implementation.
+3. Features were implemented on dedicated branches.
+4. Completed work was opened as a pull request and merged into the main branch after review.
+
+This is reflected in the repository's commit and PR history, including dedicated branches for optional tasks.
+
+## Future Improvements
+
+- Migrate to `IndexedDB` if document volume or size grows beyond what `localStorage` comfortably supports
+- Add full-text search across documents
+- Add tagging/categorisation for easier document organisation
+- Add a "trash"/undo mechanism for deleted documents
+- Add automated tests for document persistence and history logic
